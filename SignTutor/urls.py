@@ -21,3 +21,4 @@ urlpatterns = [
     path('home/', include('home.urls')),
     path('turkish/', include('turkish.urls'))
 ]
+

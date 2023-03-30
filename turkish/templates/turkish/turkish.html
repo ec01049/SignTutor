@@ -1,9 +1,12 @@
 {% load static %}
-<link rel="stylesheet" href="{% static 'turkish/style.css' %}">
+
+<link rel="stylesheet" type="text/css" href="{% static 'common/style.css' %}">
+<link rel="stylesheet" type="text/css" href="{% static 'turkish/style.css' %}">
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Rubik:wght@600&display=swap" rel="stylesheet">
 <link href="https://fonts.googleapis.com/css2?family=Rubik:wght@400;600&display=swap" rel="stylesheet">
+
 
 <!DOCTYPE html>
 <html lang="en">
@@ -11,18 +14,44 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <script src="https://kit.fontawesome.com/3d3cdc9eb9.js" crossorigin="anonymous"></script>
     <title>Turkish Teaching</title>
 
   </head>
   <body>
     <header class="header">
-      <nav class="main-nav">Navigation</nav>
-      <ul class="main-nav-list">
-        <li><a class="main-nav-link" href="#"> Home </a></li>
-        <li><a class="main-nav-link" href="#"> Home </a></li>
-      </ul>
+      <nav class="main-nav">
+          <ul class="main-nav-list">
+            <li> <a class="main-nav-link" href="/home"> <i class="fa-solid fa-house"></i></a></li>
+            <li><a class="main-nav-link" href="#"> Turkish </a></li>
+            <li><a class="main-nav-link" href="#"> American </a></li>
+          </ul>
+      </nav>
     </header>
+
     <main>
+
+        <h3 class="text" id="title">What sign would you like to learn?</h3>
+
+        <div class="signs">
+
+            <div class="grid-container">
+                {% for sign in signs %}
+                    <div class="sign-overview">
+                        <a class="sign-link" href="#" aria-label="{{ sign_image }}">
+                            {% with "turkish/images/"|add:sign|add:".png" as sign_image %}
+                                <img class="sign-image" src="{% static sign_image %}" alt="{{ sign_image }}" role="presentation">
+                            {% endwith %}
+                            <span class="sign-text">{{ sign|title }}</span>
+                        </a>
+                    </div>
+                {% endfor %}
+            </div>
+        </div>
+
+
+
+
 
     </main>
   </body>

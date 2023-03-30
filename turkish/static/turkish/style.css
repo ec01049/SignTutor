@@ -1,0 +1,91 @@
+a, .text {
+    font-family: "Rubik", sans-serif;
+    color: #404040;
+    text-align: center;
+}
+
+#title {
+    font-size: 30px;
+}
+
+.header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+
+    height: 4rem;
+    padding: 0 3rem;
+
+}
+
+.main-nav-list {
+    list-style:none;
+    display: flex;
+    gap: 3.2rem;
+
+}
+
+.main-nav-link:link,
+.main-nav-link:visited {
+    display: inline-block;
+    text-decoration: none;
+    color: black;
+    font-weight: 500;
+    font-size: 1.2rem;
+    transition: all 0.2s;
+
+}
+
+.main-nav-link:hover,
+.main-nav-link:active {
+    color: #37ae5f;
+}
+
+.grid-container {
+    display: grid;
+    grid-template-columns: auto auto auto auto;
+    gap: 10px;
+    padding: 10px;
+}
+
+.sign-overview {
+    width:250px;
+    text-align:center;
+    display: inline-block;
+
+    font-size: 20px;
+    padding: 20px 0;
+    color: #404040;
+    vertical-align: bottom;
+}
+
+
+.sign-link {
+    text-decoration: none;
+
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+    align-items: center;
+
+    height: 100%;
+    width: 100%;
+}
+
+.sign-image {
+    max-width: 250px;
+    max-height: 250px;
+}
+
+.sign-text {
+    font-size: 20px;
+
+}
+
+/*figure {
+
+    margin:10px;
+    display:inline-block;
+    vertical-align:bottom;
+    text-align: center;
+}*/
