@@ -22,7 +22,7 @@
     <header class="header">
       <nav class="main-nav">
           <ul class="main-nav-list">
-            <li> <a class="main-nav-link" href="/home"> <i class="fa-solid fa-house"></i></a></li>
+            <li><a class="main-nav-link" href="/home"> <i class="fa-solid fa-house"></i></a></li>
             <li><a class="main-nav-link" href="#"> Turkish </a></li>
             <li><a class="main-nav-link" href="#"> American </a></li>
           </ul>
@@ -38,7 +38,9 @@
             <div class="grid-container">
                 {% for sign in signs %}
                     <div class="sign-overview">
-                        <a class="sign-link" href="#" aria-label="{{ sign_image }}">
+                        {% with "/turkish/"|add:sign as sign_link %}
+                            <a class="sign-link" href={{ sign_link }} aria-label="{{ sign_image }}">
+                        {% endwith %}
                             {% with "turkish/images/"|add:sign|add:".png" as sign_image %}
                                 <img class="sign-image" src="{% static sign_image %}" alt="{{ sign_image }}" role="presentation">
                             {% endwith %}

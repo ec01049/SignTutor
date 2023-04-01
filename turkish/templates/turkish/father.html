@@ -1,0 +1,51 @@
+{% load static %}
+
+<link rel="stylesheet" type="text/css" href="{% static 'common/style.css' %}">
+<link rel="stylesheet" type="text/css" href="{% static 'father/style.css' %}">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Rubik:wght@600&display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Rubik:wght@400;600&display=swap" rel="stylesheet">
+
+
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <script src="https://kit.fontawesome.com/3d3cdc9eb9.js" crossorigin="anonymous"></script>
+    <title>Father Sign</title>
+
+  </head>
+  <body>
+    <header class="header">
+      <nav class="main-nav">
+          <ul class="main-nav-list">
+            <li> <a class="main-nav-link" href="/home"> <i class="fa-solid fa-house"></i></a></li>
+            <li><a class="main-nav-link" href="/turkish"> Turkish </a></li>
+            <li><a class="main-nav-link" href="#"> American </a></li>
+          </ul>
+      </nav>
+    </header>
+
+    <main>
+        <div>
+            <h3 class="text" id="title">Lets teach you Father!</h3>
+            <h4 class="text" id="intro">First, Watch the follow videos to see how its performed</h4>
+            <p class="text">Play close attention to the signers movements. Signs can be performed with either hand so use whichever feels comfortable to you!</p>
+            <div class="grid-container">
+              <div class="example-video"></div>
+                <video width="320" height="240" controls>
+                    <source src="turkish/videos/father/1.mp4" type="video/mp4">
+                    Your browser does not support HTML video.
+                </video>
+              <div class="example-video"></div>
+              <div class="example-video"></div>
+        </div>
+
+
+    </main>
+  </body>
+</html>
+
