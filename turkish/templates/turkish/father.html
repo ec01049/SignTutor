@@ -18,7 +18,7 @@
     <title>Father Sign</title>
 
   </head>
-  <body>
+  <body onload="refreshVideos()">
     <header class="header">
       <nav class="main-nav">
           <ul class="main-nav-list">
@@ -34,42 +34,59 @@
             <h3 class="text" id="title">Lets teach you Father!</h3>
             <h4 class="text" id="intro">First, Watch the follow videos to see how its performed</h4>
             <p class="text">Play close attention to the signers movements. Signs can be performed with either hand so use whichever feels comfortable to you!</p>
+            <button onclick="refreshVideos()" class="button">Refresh Videos</button>
+
             <div class="grid-container">
+
                 <div> <a id="video1"> </a> </div>
                 <div> <a id="video2"> </a> </div>
                 <div> <a id="video3"> </a> </div>
 
                     <script>
 
-                        // Three random videos
-                        const exampleVideos= ['video1','video2','video3'];
-                        let videos = Array(0,1,2,3,4,5,6,7,8);
 
-                        let container = "";
-                        // Generate random video for each video div
-                        exampleVideos.forEach(randomFunction);
+                        function refreshVideos() {
+
+                            // Three random videos
+                            const exampleVideos = ['video1', 'video2', 'video3'];
+                            let videos = Array(0, 1, 2, 3, 4, 5, 6, 7, 8);
+
+                            let container = "";
+                            // Generate random video for each video div
+                            exampleVideos.forEach(randomFunction);
 
 
-                        function randomFunction(value) {
-                            // get random index value
-                            const randomIndex = Math.floor(Math.random() * videos.length);
+                            function randomFunction(value) {
+                                // get random index value
 
-                            //# generate random number
-                            //let number = Math.floor(Math.random() * 9);
-                            let number = videos[randomIndex];
-                            videos.splice(randomIndex, 1);
-                            let mySrc = "/static/father/videos/webm/" + number + ".webm";
+                                container = document.getElementById(value);
+                                empty(container);
 
-                            //# create video element to append into above <a> tag
-                            let tmpElement = document.createElement("video");
-                            tmpElement.setAttribute("controls", "true" );
-                            tmpElement.setAttribute("width", "384");
-                            tmpElement.setAttribute("src", mySrc);
+                                const randomIndex = Math.floor(Math.random() * videos.length);
 
-                            //# append the dynamically created element...
-                            container = document.getElementById(value);
-                            container.appendChild(tmpElement);
-                    }
+                                //# generate random number
+                                //let number = Math.floor(Math.random() * 9);
+                                let number = videos[randomIndex];
+                                videos.splice(randomIndex, 1);
+                                let mySrc = "/static/father/videos/webm/" + number + ".webm";
+
+                                //# create video element to append into above <a> tag
+                                let tmpElement = document.createElement("video");
+                                tmpElement.setAttribute("controls", "true");
+                                tmpElement.setAttribute("width", "384");
+                                tmpElement.setAttribute("src", mySrc);
+
+                                //# append the dynamically created element...
+                                container = document.getElementById(value);
+                                container.appendChild(tmpElement);
+                            }
+
+                            function empty(element) {
+                                    while(element.firstElementChild) {
+                                     element.firstElementChild.remove();
+                                    }
+                                }
+                        }
 
                     //# generate random number
                     //let number = Math.floor(Math.random() * 9);
@@ -87,9 +104,8 @@
 
                     </script>
 
-
-
             </div>
+
         </div>
 
     </main>
