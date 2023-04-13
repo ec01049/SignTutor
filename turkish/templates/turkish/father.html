@@ -34,7 +34,21 @@
             <h3 class="text" id="title">Lets teach you Father!</h3>
             <h4 class="text" id="intro">First, Watch the follow videos to see how its performed</h4>
             <p class="text">Play close attention to the signers movements. Signs can be performed with either hand so use whichever feels comfortable to you!</p>
-            <button onclick="refreshVideos()" class="button">Refresh Videos</button>
+            <button onclick="refreshVideos()" class="button buttonRefresh">Refresh Videos</button>
+            <!-- Trigger/Open The Modal -->
+            <button class="button buttonTest" id="test">Test yourself</button>
+
+            <!-- The Modal -->
+            <div id="popup" class="modal">
+              <!-- Modal content -->
+              <div class="modal-content">
+                <span class="close">&times;</span>
+                <input id="checkboxAgree" type="checkbox" name="checkboxAgree" value="Yes">
+                  <label for="checkboxAgree"> I Agree</label><br>
+                <p>Some text in the Modal..</p>
+                <button class="button" id="proceed-btn">Test yourself</button>
+              </div>
+            </div>
 
             <div class="grid-container">
 
@@ -42,8 +56,42 @@
                 <div> <a id="video2"> </a> </div>
                 <div> <a id="video3"> </a> </div>
 
+
                     <script>
 
+                        // Get the modal
+                        const modal = document.getElementById("popup");
+                        // Get the button that opens the modal
+                        const btn = document.getElementById("test");
+                        // Get the <span> element that closes the modal
+                        const span = document.getElementsByClassName("close")[0];
+
+                        // When the user clicks the button, open the modal
+                        btn.onclick = function() {
+                          modal.style.display = "block";
+                        }
+                        // When the user clicks on <span> (x), close the modal
+                        span.onclick = function() {
+                          modal.style.display = "none";
+                        }
+
+                        // When the user clicks anywhere outside of the modal, close it
+                        window.onclick = function(event) {
+                          if (event.target === modal) {
+                            modal.style.display = "none";
+                          }
+                        }
+
+                        function checkAgree() {
+                            let check = document.getElementById("checkboxAgree")
+                            if (check.getAttribute('checked')) { //checkbox is checked
+                               location.href = "page.html"; //load the next page.
+                           } else {
+                               alert("You need to check the box before you can continue");
+                           }
+                        }
+
+                        document.getElementById("proceed-btn").addEventListener("click", checkAgree , false);
 
                         function refreshVideos() {
 
