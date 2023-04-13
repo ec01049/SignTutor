@@ -10,3 +10,7 @@ def turkish_display(request):
 
 def father_display(request):
     return render(request, 'turkish/father.html')
+
+
+def father_test_display(request):
+    return render(request, 'turkish/fatherTest.html')

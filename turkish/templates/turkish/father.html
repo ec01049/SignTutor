@@ -45,8 +45,8 @@
                 <span class="close">&times;</span>
                 <input id="checkboxAgree" type="checkbox" name="checkboxAgree" value="Yes">
                   <label for="checkboxAgree"> I Agree</label><br>
-                <p>Some text in the Modal..</p>
-                <button class="button" id="proceed-btn">Test yourself</button>
+                <p id="demo"></p>
+                <button onclick="checkAgree()" class="button" id="proceed-btn">Test yourself</button>
               </div>
             </div>
 
@@ -83,15 +83,15 @@
                         }
 
                         function checkAgree() {
-                            let check = document.getElementById("checkboxAgree")
-                            if (check.getAttribute('checked')) { //checkbox is checked
-                               location.href = "page.html"; //load the next page.
-                           } else {
-                               alert("You need to check the box before you can continue");
-                           }
-                        }
+                            var check = document.getElementById("checkboxAgree").checked;
 
-                        document.getElementById("proceed-btn").addEventListener("click", checkAgree , false);
+                            if (check === true) { //checkbox is checked
+                               location.href = "father/test"; //load the next page.
+                            } else {
+                                alert("You need to check the box before continuing")
+                            }
+                        }
+                        //document.getElementById("proceed-btn").addEventListener("click", checkAgree , false);
 
                         function refreshVideos() {
 
