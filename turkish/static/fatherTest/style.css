@@ -1,0 +1,59 @@
+pre {
+  overflow-x: auto;
+  white-space: pre-wrap;
+  white-space: -moz-pre-wrap;
+  white-space: pre-wrap;
+  white-space: -o-pre-wrap;
+  word-wrap: break-word;
+}
+
+#renderWrapper {
+  position: relative;
+  display: inline-block;
+}
+
+#renderOverlay {
+  position: absolute;
+  display: flex;
+
+  opacity: 0;
+  transition: opacity 0.2s ease-in;
+
+  -webkit-user-select: none !important;
+  user-select: none !important;
+  pointer-events: none !important;
+
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  height: 100%;
+  width: 100%;
+
+  background: rgba(255, 255, 255, 0.6);
+}
+
+#renderOverlay.show {
+  opacity: 100%;
+}
+
+#renderOverlay p {
+  /* Make it inline so it stays in the center, based on the parent
+     flex */
+  display: inline-block;
+
+  font-family: sans-serif;
+  font-size: 24pt;
+  margin: 0;
+  padding: 0;
+  line-height: 1;
+}
+
+#renderOverlay p.big {
+    font-size: 144pt;
+}
+
