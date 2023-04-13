@@ -8,9 +8,16 @@ def turkish_display(request):
     })
 
 
-def father_display(request):
-    return render(request, 'turkish/father.html')
+def sign_display(request, sign):
+    return render(request, "turkish/sign.html", {"sign": sign})
 
 
-def father_test_display(request):
-    return render(request, 'turkish/fatherTest.html')
+def test_display(request, sign):
+    return render(request, "turkish/test.html", {"sign": sign})
+
+# def father_display(request):
+#   return render(request, 'turkish/father.html')
+
+
+# def father_test_display(request):
+#   return render(request, 'turkish/fatherTest.html')

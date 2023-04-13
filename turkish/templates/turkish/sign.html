@@ -1,7 +1,7 @@
 {% load static %}
 
 <link rel="stylesheet" type="text/css" href="{% static 'common/style.css' %}">
-<link rel="stylesheet" type="text/css" href="{% static 'father/style.css' %}">
+<link rel="stylesheet" type="text/css" href="{% static 'sign/style.css' %}">
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Rubik:wght@600&display=swap" rel="stylesheet">
@@ -15,7 +15,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <meta http-equiv="X-UA-Compatible" content="ie=edge">
     <script src="https://kit.fontawesome.com/3d3cdc9eb9.js" crossorigin="anonymous"></script>
-    <title>Father Sign</title>
+    <title>{{sign}} Sign</title>
 
   </head>
   <body onload="refreshVideos()">
@@ -31,7 +31,7 @@
 
     <main>
         <div>
-            <h3 class="text" id="title">Lets teach you Father!</h3>
+            <h3 class="text" id="title">Lets teach you '{{ sign }}'</h3>
             <h4 class="text" id="intro">First, Watch the follow videos to see how its performed</h4>
             <p class="text">Play close attention to the signers movements. Signs can be performed with either hand so use whichever feels comfortable to you!</p>
             <button onclick="refreshVideos()" class="button buttonRefresh">Refresh Videos</button>
@@ -56,7 +56,7 @@
                 <div> <a id="video2"> </a> </div>
                 <div> <a id="video3"> </a> </div>
 
-                <script src="{% static 'father/script.js' %}"></script>
+                <script src="{% static 'sign/script.js' %}"></script>
 
             </div>
 
