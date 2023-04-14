@@ -56,7 +56,10 @@
                 <div> <a id="video2"> </a> </div>
                 <div> <a id="video3"> </a> </div>
 
-                <script src="{% static 'sign/script.js' %}"></script>
+                <script type="text/javascript">
+                    const sign = "{{ sign }}"
+                </script>
+                <script src="{% static 'sign/script.js' %}" > </script>
 
             </div>
 

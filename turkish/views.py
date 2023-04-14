@@ -4,7 +4,7 @@ from django.shortcuts import render
 # Create your views here.
 def turkish_display(request):
     return render(request, 'turkish/turkish.html', {
-        "signs": ["father", "mother", "brother", "sister", "child", "baby", "grandmother", "family", "friend", "house"]
+        "signs": ["father", "mother", "brother", "sister", "child", "baby", "grandmother", "grandfather", "family", "friend", "house"]
     })
 
 
@@ -15,9 +15,3 @@ def sign_display(request, sign):
 def test_display(request, sign):
     return render(request, "turkish/test.html", {"sign": sign})
 
-# def father_display(request):
-#   return render(request, 'turkish/father.html')
-
-
-# def father_test_display(request):
-#   return render(request, 'turkish/fatherTest.html')

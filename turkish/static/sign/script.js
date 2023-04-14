@@ -1,4 +1,6 @@
 
+    // Get the sign value
+    //const sign = JSON.parse(document.getElementById('sign-data').textContent);
 
     // Get the modal
     const modal = document.getElementById("popup");
@@ -27,7 +29,7 @@
         var check = document.getElementById("checkboxAgree").checked;
 
         if (check === true) { //checkbox is checked
-           location.href = "father/test"; //load the next page.
+           location.href = sign + "/test"; //load the next page.
         } else {
             alert("You need to check the box before continuing")
         }
@@ -57,7 +59,7 @@
             //let number = Math.floor(Math.random() * 9);
             let number = videos[randomIndex];
             videos.splice(randomIndex, 1);
-            let mySrc = "/static/father/videos/webm/" + number + ".webm";
+            let mySrc = "/static/" + sign + "/videos/webm/" + number + ".webm";
 
             //# create video element to append into above <a> tag
             let tmpElement = document.createElement("video");
