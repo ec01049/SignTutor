@@ -26,145 +26,165 @@ function checkBrowserWebcamSupport() {
   return !!navigator.mediaDevices.getUserMedia;
 }
 
-/**
- * Triggers the browser to download a Blob object.
- */
-function downloadFile(blob, filename) {
-  const url = window.URL.createObjectURL(blob, {
-    type: 'application/octet-stream'
-  });
+function makeDetection(blob) {
 
-  const link = document.createElement('a');
-  link.style = 'display: none';
-  document.body.appendChild(link);
-
-  link.href = url;
-  if (filename) link.download = filename;
-
-  link.click();
-  setTimeout(() => {
-    window.URL.revokeObjectURL(url);
-  }, 0);
+  $.ajax({
+    method: 'POST',
+    url: '/turkish/recognise/',
+    data: {
+      'video': blob
+    },
+    success: function (data) {
+      alert('Data Successfully Posted');
+    },
+  })
 }
 
-/**
- * Handles errors that prevent the application
- * from working.
- */
-function handleFatalError(message) {
-  $('#renderWrapper').innerHTML = (`<pre>[ERROR] ${message}</pre><p><a href="">Try Again</a></p>`);
-}
+  /**
+   * Triggers the browser to download a Blob object.
+   */
+  function downloadFile(blob, filename) {
+
+    const url = window.URL.createObjectURL(blob, {
+      type: 'application/octet-stream'
+    });
+
+    const link = document.createElement('a');
+    link.style = 'display: none';
+    document.body.appendChild(link);
+
+    link.href = url;
+    if (filename) link.download = filename;
+
+    link.click();
+    setTimeout(() => {
+      window.URL.revokeObjectURL(url);
+    }, 0);
+  }
+
+  /**
+   * Handles errors that prevent the application
+   * from working.
+   */
+  function handleFatalError(message) {
+    $('#renderWrapper').innerHTML = (`<pre>[ERROR] ${message}</pre><p><a href="">Try Again</a></p>`);
+  }
 
 //////////////////////////////////////////////////////////////
 
 // Singleton Media Recorder: once the application initializes,
 // and the stream has been prepared, the media recorder will
 // be initialized.
-let sMediaRecorder = null;
-let isRecording = false;
+  let sMediaRecorder = null;
+  let isRecording = false;
 
-/**
- * Register event handlers (e.g., to start recording).
- */
-function registerEventHandlers() {
-  $("#startButton").addEventListener('click', (event) => {
-    event.preventDefault();
+  /**
+   * Register event handlers (e.g., to start recording).
+   */
+  function registerEventHandlers() {
+    $("#startButton").addEventListener('click', (event) => {
+      event.preventDefault();
 
-    if (!isRecording) {
-      // Start recording, and change button to display 'stop
-      // recording'.
-      if (!sMediaRecorder) { alert("Error!"); return; }
-
-      $("#startButton").textContent = "Waiting...";
-      $("#startButton").disabled = true;
-
-      function startRecording() {
-        $("#startButton").textContent = "Recording...";
-
-        // Starts recording in VIDEO_LENGTH_MILLISECONDS
-        // chunks. We'll just wait for the first chunk
-        // and then stop recording immediately.
-        // (dataavailable is fired as soon as a chunk is
-        // available, so stopping the first time we get
-        // one of these events, will give us a correctly
-        // sized video).
-        sMediaRecorder.start(VIDEO_LENGTH_MILLISECONDS);
-        const onChunk = (event) => {
-          $("#startButton").textContent = "Processing...";
-          sMediaRecorder.stop();
-          sMediaRecorder.removeEventListener('dataavailable', onChunk);
-
-          const rawVideoBlob = event.data;
-          const videoBlob = new Blob([rawVideoBlob], {
-            type: 'video/webp'
-          });
-
-          downloadFile(videoBlob, 'video.webm');
-
-          $("#startButton").textContent = "Start Recording";
-          $("#startButton").disabled = false;
-          isRecording = false;
-        };
-        sMediaRecorder.addEventListener('dataavailable', onChunk);
-
-        // When done, update recording status.
-        isRecording = true;
-      }
-
-      // Start countdown
-      $("#renderOverlay").classList.add('show');
-
-      let timeout = 3;
-
-      function handleCounterTick() {
-        $("#renderCounter").textContent = timeout;
-        timeout--;
-
-        if (timeout < 0) {
-          $("#renderOverlay").classList.remove('show');
-          // Start recording after the animation has finished.
-          setTimeout(startRecording, 200);
+      if (!isRecording) {
+        // Start recording, and change button to display 'stop
+        // recording'.
+        if (!sMediaRecorder) {
+          alert("Error!");
           return;
         }
 
-        // Then tick the counter until completion.
-        setTimeout(handleCounterTick, 1000);
+        $("#startButton").textContent = "Waiting...";
+        $("#startButton").disabled = true;
+
+        function startRecording() {
+          $("#startButton").textContent = "Recording...";
+
+          // Starts recording in VIDEO_LENGTH_MILLISECONDS
+          // chunks. We'll just wait for the first chunk
+          // and then stop recording immediately.
+          // (dataavailable is fired as soon as a chunk is
+          // available, so stopping the first time we get
+          // one of these events, will give us a correctly
+          // sized video).
+          sMediaRecorder.start(VIDEO_LENGTH_MILLISECONDS);
+          const onChunk = (event) => {
+            $("#startButton").textContent = "Processing...";
+            sMediaRecorder.stop();
+            sMediaRecorder.removeEventListener('dataavailable', onChunk);
+
+            const rawVideoBlob = event.data;
+            const videoBlob = new Blob([rawVideoBlob], {
+              type: 'video/webp'
+            });
+
+            makeDetection(videoBlob);
+            downloadFile(videoBlob, 'video.webm');
+
+            $("#startButton").textContent = "Start Recording";
+            $("#startButton").disabled = false;
+            isRecording = false;
+          };
+          sMediaRecorder.addEventListener('dataavailable', onChunk);
+
+          // When done, update recording status.
+          isRecording = true;
+        }
+
+        // Start countdown
+        $("#renderOverlay").classList.add('show');
+
+        let timeout = 3;
+
+        function handleCounterTick() {
+          $("#renderCounter").textContent = timeout;
+          timeout--;
+
+          if (timeout < 0) {
+            $("#renderOverlay").classList.remove('show');
+            // Start recording after the animation has finished.
+            setTimeout(startRecording, 200);
+            return;
+          }
+
+          // Then tick the counter until completion.
+          setTimeout(handleCounterTick, 1000);
+        }
+
+        // Initialize counter.
+        handleCounterTick();
       }
 
-      // Initialize counter.
-      handleCounterTick();
-    }
-
-  });
-}
+    });
+  }
 
 // Initialize code to render video.
-(async () => {
+  (async () => {
 
-  // Stop executing if webcam not supported.
-  if (!checkBrowserWebcamSupport()) return;
+    // Stop executing if webcam not supported.
+    if (!checkBrowserWebcamSupport()) return;
 
-  // Register event handlers.
-  registerEventHandlers();
+    // Register event handlers.
+    registerEventHandlers();
 
-  // Request video from the browser.
-  const stream = await navigator.mediaDevices.getUserMedia({
-    video: {
-      width: VIDEO_WIDTH,
-      height: VIDEO_HEIGHT,
-      facingMode: "user",
-      frameRate: FRAME_RATE,
-    },
-    audio: false
+    // Request video from the browser.
+    const stream = await navigator.mediaDevices.getUserMedia({
+      video: {
+        width: VIDEO_WIDTH,
+        height: VIDEO_HEIGHT,
+        facingMode: "user",
+        frameRate: FRAME_RATE,
+      },
+      audio: false
+    });
+
+    $('#render').srcObject = stream;
+
+    sMediaRecorder = new MediaRecorder(stream, {
+      mimeType: "video/webm"
+    });
+
+  })().catch((error) => {
+    handleFatalError(error);
+    console.error(error);
   });
 
-  $('#render').srcObject = stream;
-
-  sMediaRecorder = new MediaRecorder(stream, {
-    mimeType: "video/webm"
-  });
-
-})().catch((error) => {
-  handleFatalError(error);
-  console.error(error);
-});
