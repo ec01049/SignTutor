@@ -28,16 +28,28 @@ function checkBrowserWebcamSupport() {
 
 function makeDetection(blob) {
 
-  $.ajax({
-    method: 'POST',
-    url: '/turkish/recognise/',
-    data: {
-      'video': blob
-    },
-    success: function (data) {
-      alert('Data Successfully Posted');
-    },
-  })
+  const csrftoken = document.querySelector('[name=csrfmiddlewaretoken]').value;
+  const reader = new FileReader();
+  reader.onload = function() {
+    const base64 = btoa(reader.result);
+
+    const xhr = new XMLHttpRequest();
+    xhr.open('POST', '/turkish/recognise/', true);
+    xhr.setRequestHeader('Content-Type', 'application/json');
+    xhr.setRequestHeader('X-CSRFToken', csrftoken); // Include the CSRF token
+    xhr.onreadystatechange = function() {
+      if (xhr.readyState === 4 && xhr.status === 200) {
+        // handle the response from the server
+        console.log(xhr.responseText);
+      }
+    };
+    const data = { data: base64 };
+     xhr.send(JSON.stringify(data));
+  };
+
+  reader.readAsArrayBuffer(blob);
+
+
 }
 
   /**
