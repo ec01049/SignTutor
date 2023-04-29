@@ -30,8 +30,9 @@ async function base64EncodeBlob(blob) {
 
   return await new Promise((resolve, reject) => {
     const reader = new FileReader();
+
     reader.onloadend = () => {
-      resolve(btoa(reader.result));
+      resolve(reader.result);
     };
 
     reader.onerror = (error) => {
@@ -45,7 +46,7 @@ async function base64EncodeBlob(blob) {
 
 async function makeDetection(blob) {
 
-  const payload = await base64EncodeBlob(blob);
+  const payload = (await base64EncodeBlob(blob)).split(',')[1];
 
   // Fetch CSRF token from page.
   const csrftoken = document.querySelector('[name=csrfmiddlewaretoken]').value;

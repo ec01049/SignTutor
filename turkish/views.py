@@ -1,4 +1,5 @@
 import json
+import os
 import tempfile
 import base64
 from django.shortcuts import render
@@ -16,10 +17,11 @@ def recognise(request):
 
         # Save decoded blob to temporary file
         # Create a temporary file
-        with tempfile.NamedTemporaryFile() as temp_file:
+        with tempfile.NamedTemporaryFile(suffix='.webp') as temp_file:
             # Write the decoded data to the temporary file
             temp_file.write(video)
-            prediction.predict(temp_file.name)
+            result = prediction.predict(temp_file)
+            print(result)
 
         response_data = {'message': 'Video uploaded successfully!'}
         return JsonResponse(response_data, status=200)

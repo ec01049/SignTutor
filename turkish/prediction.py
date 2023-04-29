@@ -1,9 +1,10 @@
+import os
+
 from keras.models import load_model
 import cv2
 import mediapipe as mp
 import numpy as np
 
-sequence = []
 threshold = 0.5
 mp_holistic = mp.solutions.holistic  # Holistic model
 
@@ -33,8 +34,14 @@ def extract_keypoints_nf(results):
     return np.concatenate([pose, lh, rh])
 
 
-def predict(filepath):
+def predict(file):
+    sequence = []
+
+    filepath = file.name
     cap = cv2.VideoCapture(filepath)
+
+    print("Loading model")
+    model = load_model('model/TurkishLSTMSoftmax1.h5')
 
     with mp_holistic.Holistic(min_detection_confidence=0.5, min_tracking_confidence=0.5) as holistic:
 
@@ -56,13 +63,11 @@ def predict(filepath):
             keypoints = extract_keypoints_nf(results)
             sequence.append(keypoints)
             # making prediction
-            model = load_model('model/LSTMSoftmax1.h5')
 
             if len(sequence) == 50:
+                print("Making prediction")
                 res = model.predict(np.expand_dims(sequence, axis=0))[0]
                 # print(actions[np.argmax(res)])
                 if res[np.argmax(res)] > threshold:
-                    print(actions[np.argmax(res)])
-
-        result = actions[np.argmax(res)]
-        return result
+                    result = actions[np.argmax(res)]
+                    return result
