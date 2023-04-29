@@ -26,29 +26,42 @@ function checkBrowserWebcamSupport() {
   return !!navigator.mediaDevices.getUserMedia;
 }
 
-function makeDetection(blob) {
+async function base64EncodeBlob(blob) {
 
-  const csrftoken = document.querySelector('[name=csrfmiddlewaretoken]').value;
-  const reader = new FileReader();
-  reader.onload = function() {
-    const base64 = btoa(reader.result);
-
-    const xhr = new XMLHttpRequest();
-    xhr.open('POST', '/turkish/recognise/', true);
-    xhr.setRequestHeader('Content-Type', 'application/json');
-    xhr.setRequestHeader('X-CSRFToken', csrftoken); // Include the CSRF token
-    xhr.onreadystatechange = function() {
-      if (xhr.readyState === 4 && xhr.status === 200) {
-        // handle the response from the server
-        console.log(xhr.responseText);
-      }
+  return await new Promise((resolve, reject) => {
+    const reader = new FileReader();
+    reader.onloadend = () => {
+      resolve(btoa(reader.result));
     };
-    const data = { data: base64 };
-     xhr.send(JSON.stringify(data));
+
+    reader.onerror = (error) => {
+      reject(error);
+    }
+
+    reader.readAsDataURL(blob);
+  });
+
+}
+
+async function makeDetection(blob) {
+
+  const payload = await base64EncodeBlob(blob);
+
+  // Fetch CSRF token from page.
+  const csrftoken = document.querySelector('[name=csrfmiddlewaretoken]').value;
+
+  const xhr = new XMLHttpRequest();
+  xhr.open('POST', '/turkish/recognise/', true);
+  xhr.setRequestHeader('Content-Type', 'application/json');
+  xhr.setRequestHeader('X-CSRFToken', csrftoken); // Include the CSRF token
+  xhr.onreadystatechange = function () {
+    if (xhr.readyState === 4 && xhr.status === 200) {
+      // handle the response from the server
+      console.log(xhr.responseText);
+    }
   };
-
-  reader.readAsArrayBuffer(blob);
-
+  const data = {payload};
+  xhr.send(JSON.stringify(data));
 
 }
 
@@ -119,7 +132,7 @@ function makeDetection(blob) {
           // one of these events, will give us a correctly
           // sized video).
           sMediaRecorder.start(VIDEO_LENGTH_MILLISECONDS);
-          const onChunk = (event) => {
+          const onChunk = async (event) => {
             $("#startButton").textContent = "Processing...";
             sMediaRecorder.stop();
             sMediaRecorder.removeEventListener('dataavailable', onChunk);
@@ -129,8 +142,8 @@ function makeDetection(blob) {
               type: 'video/webp'
             });
 
-            makeDetection(videoBlob);
-            downloadFile(videoBlob, 'video.webm');
+            await makeDetection(videoBlob);
+            // downloadFile(videoBlob, 'video.webm');
 
             $("#startButton").textContent = "Start Recording";
             $("#startButton").disabled = false;

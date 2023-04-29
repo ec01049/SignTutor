@@ -1,3 +1,4 @@
+import json
 import tempfile
 import base64
 from django.shortcuts import render
@@ -7,7 +8,8 @@ from django.http import JsonResponse
 
 def recognise(request):
     if request.method == 'POST':
-        video_base64 = request.POST.get('video')  # get the video data from the request
+        wrapper = json.loads(request.body)
+        video_base64 = wrapper['payload']
 
         # Decode the base64 encoded blob file
         video = base64.b64decode(video_base64)
@@ -17,17 +19,7 @@ def recognise(request):
         with tempfile.NamedTemporaryFile() as temp_file:
             # Write the decoded data to the temporary file
             temp_file.write(video)
-
-        print(temp_file.name)
-        temp_file.seek(0)
-        contents = temp_file.read()
-        print(contents)
-
-        # Make prediction
-        # result = prediction.predict(video)
-
-        # Close the file and thus delete the data
-        temp_file.close()
+            prediction.predict(temp_file.name)
 
         response_data = {'message': 'Video uploaded successfully!'}
         return JsonResponse(response_data, status=200)

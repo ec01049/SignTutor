@@ -39,6 +39,7 @@
                     <p>Get ready!</p>
                   </div>
                   <video autoplay id="render"></video>
+                    <input type="hidden" name="csrfmiddlewaretoken" value="{{ csrf_token }}">
                 </div>
 
                 <script src="{% static 'test/script.js' %}"></script>
