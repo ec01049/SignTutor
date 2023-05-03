@@ -5,7 +5,7 @@ import cv2
 import mediapipe as mp
 import numpy as np
 
-threshold = 0.5
+threshold = 0.2
 mp_holistic = mp.solutions.holistic  # Holistic model
 
 # Actions that we try to detect
@@ -41,7 +41,7 @@ def predict(file):
     cap = cv2.VideoCapture(filepath)
 
     print("Loading model")
-    model = load_model('model/TurkishLSTMSoftmax1.h5')
+    model = load_model('model/LSTMtanh.h5')
 
     with mp_holistic.Holistic(min_detection_confidence=0.5, min_tracking_confidence=0.5) as holistic:
 
@@ -70,4 +70,5 @@ def predict(file):
                 # print(actions[np.argmax(res)])
                 if res[np.argmax(res)] > threshold:
                     result = actions[np.argmax(res)]
+                    print(result)
                     return result

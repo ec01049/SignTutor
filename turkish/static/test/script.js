@@ -45,24 +45,40 @@ async function base64EncodeBlob(blob) {
 }
 
 async function makeDetection(blob) {
-
   const payload = (await base64EncodeBlob(blob)).split(',')[1];
 
-  // Fetch CSRF token from page.
-  const csrftoken = document.querySelector('[name=csrfmiddlewaretoken]').value;
+  return await new Promise((resolve, reject) => {
+    // Fetch CSRF token from page.
+    const csrftoken = document.querySelector('[name=csrfmiddlewaretoken]').value;
 
-  const xhr = new XMLHttpRequest();
-  xhr.open('POST', '/turkish/recognise/', true);
-  xhr.setRequestHeader('Content-Type', 'application/json');
-  xhr.setRequestHeader('X-CSRFToken', csrftoken); // Include the CSRF token
-  xhr.onreadystatechange = function () {
-    if (xhr.readyState === 4 && xhr.status === 200) {
-      // handle the response from the server
-      console.log(xhr.responseText);
+    const xhr = new XMLHttpRequest();
+    xhr.open('POST', '/turkish/recognise/', true);
+    xhr.setRequestHeader('Content-Type', 'application/json');
+    xhr.setRequestHeader('X-CSRFToken', csrftoken); // Include the CSRF token
+
+    xhr.onreadystatechange = function () {
+      if (xhr.readyState === 4) {
+        if (xhr.status === 200) {
+          // handle the response from the server
+          console.log(xhr.responseText);
+
+          let prediction = xhr.responseText;
+          resolve(prediction);
+        } else {
+          alert("The server encountered a problem. Please try again later.");
+          reject();
+        }
+      }
+    };
+
+    xhr.onerror = function(error) {
+      alert("There was a problem contacting the server. Please try again later.");
+      reject(error);
     }
-  };
-  const data = {payload};
-  xhr.send(JSON.stringify(data));
+
+    const data = {payload};
+    xhr.send(JSON.stringify(data));
+  });
 
 }
 
@@ -143,7 +159,16 @@ async function makeDetection(blob) {
               type: 'video/webp'
             });
 
-            await makeDetection(videoBlob);
+            try {
+              let prediction = await makeDetection(videoBlob);
+              if (prediction === pageData.sign) {
+                // User performed the expected sign correctly.
+              } else {
+                // They did a different sign (or none was detected).
+              }
+            } catch(_) {
+              // do nothing on error
+            }
             // downloadFile(videoBlob, 'video.webm');
 
             $("#startButton").textContent = "Start Recording";

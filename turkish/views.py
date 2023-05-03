@@ -17,13 +17,18 @@ def recognise(request):
 
         # Save decoded blob to temporary file
         # Create a temporary file
-        with tempfile.NamedTemporaryFile(suffix='.webp') as temp_file:
-            # Write the decoded data to the temporary file
-            temp_file.write(video)
-            result = prediction.predict(temp_file)
-            print(result)
+        temp_file = tempfile.NamedTemporaryFile(delete=False, suffix='.webp')
 
-        response_data = {'message': 'Video uploaded successfully!'}
+        # Write the decoded data to the temporary file
+        temp_file.write(video)
+        result = prediction.predict(temp_file)
+        print(result)
+
+        # Clean up the temporary file
+        temp_file.close()
+        os.unlink(temp_file.name)
+
+        response_data = {'message': result}
         return JsonResponse(response_data, status=200)
     else:
         response_data = {'message': 'Invalid request method.'}

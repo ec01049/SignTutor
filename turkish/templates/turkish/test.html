@@ -39,6 +39,7 @@
                     <input type="hidden" name="csrfmiddlewaretoken" value="{{ csrf_token }}">
                 </div>
 
+                <script>const pageData = { sign: "{{ sign }}" };</script>
                 <script src="{% static 'test/script.js' %}"></script>
 
             </div>
