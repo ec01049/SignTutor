@@ -7,12 +7,32 @@ const FRAME_RATE = 30;
 // Video Duration (2 seconds)
 const VIDEO_LENGTH_MILLISECONDS = 2 * 1000;
 
+// Modal
+const modal = document.getElementById("popup");
+// Get the button that opens the modal
+const btn = document.getElementById("test");
+// Get the <span> element that closes the modal
+const span = document.getElementsByClassName("close")[0];
+
+// When the user clicks on <span> (x), close the modal
+span.onclick = function() {
+  modal.style.display = "none";
+}
+
+// When the user clicks anywhere outside of the modal, close it
+window.onclick = function(event) {
+  if (event.target === modal) {
+    modal.style.display = "none";
+  }
+}
+
 // Helper functions.
 // Simple aliases for frequently used functions.
 const $ = (selector) => document.querySelector(selector);
 
 const $$ = (selector) =>
 document.querySelectorAll(selector);
+
 
 // Utility functions.
 // Extract complex/convoluted, relevant, operations into
@@ -135,6 +155,7 @@ async function makeDetection(blob) {
           return;
         }
 
+
         $("#startButton").textContent = "Waiting...";
         $("#startButton").disabled = true;
 
@@ -149,28 +170,55 @@ async function makeDetection(blob) {
           // one of these events, will give us a correctly
           // sized video).
           sMediaRecorder.start(VIDEO_LENGTH_MILLISECONDS);
+
           const onChunk = async (event) => {
-            $("#startButton").textContent = "Processing...";
+
+            $("#startButton").textContent = "Loading...";
+            $("#loader").classList.add('show');
+            $("#renderLoading").textContent = 'Calculating your performance';
+            $("#renderCounter").textContent = '';
+            $("#renderOverlay").classList.add('show');
             sMediaRecorder.stop();
             sMediaRecorder.removeEventListener('dataavailable', onChunk);
+
 
             const rawVideoBlob = event.data;
             const videoBlob = new Blob([rawVideoBlob], {
               type: 'video/webp'
+
             });
 
+
+
             try {
-              let prediction = await makeDetection(videoBlob);
+
+              let json = await makeDetection(videoBlob);
+              let predictionMessage = JSON.parse(json);
+              let prediction = predictionMessage.message;
+
+              modal.style.display = "block";
+
+              $("#loader").classList.remove('show');
+              $("#renderOverlay").classList.remove('show');
+
+
+
               if (prediction === pageData.sign) {
+                $("#feedback").textContent = "Well done, You performed '" + pageData.sign + "' correctly!"
+
                 // User performed the expected sign correctly.
+              } else if (prediction === none){
+                $("#feedback").textContent = "Not quite! You didn't perform '" + pageData.sign + "' correctly. Make sure you're positioned correctly."
               } else {
                 // They did a different sign (or none was detected).
+                $("#feedback").textContent = "Not quite! You didn't perform '" + pageData.sign + "' correctly. We predicted '" + prediction + "'."
               }
             } catch(_) {
               // do nothing on error
             }
             // downloadFile(videoBlob, 'video.webm');
 
+            $("#renderLoading").textContent = 'Get Ready!';
             $("#startButton").textContent = "Start Recording";
             $("#startButton").disabled = false;
             isRecording = false;

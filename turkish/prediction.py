@@ -5,7 +5,7 @@ import cv2
 import mediapipe as mp
 import numpy as np
 
-threshold = 0.2
+threshold = 0.6
 mp_holistic = mp.solutions.holistic  # Holistic model
 
 # Actions that we try to detect
@@ -55,6 +55,10 @@ def predict(file):
 
             if not success:
                 break
+
+            # Flip an image or frame.
+            # Code 1 means flip horizontally.
+            frame = cv2.flip(frame, 1)
 
             # Make detections
             image, results = mediapipe_detection(frame, holistic)

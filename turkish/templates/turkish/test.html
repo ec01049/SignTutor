@@ -32,12 +32,22 @@
                 <p><button id="startButton">Start Recording</button></p>
                 <div id="renderWrapper">
                   <div id="renderOverlay">
+                    <div class="loader" id="loader"></div>
                     <p class="big" id="renderCounter">3</p>
-                    <p>Get ready!</p>
+                    <p id="renderLoading">Get ready!</p>
                   </div>
                   <video autoplay id="render"></video>
                     <input type="hidden" name="csrfmiddlewaretoken" value="{{ csrf_token }}">
                 </div>
+
+                <!-- The Modal -->
+            <div id="popup" class="modal">
+              <!-- Modal content -->
+              <div class="modal-content">
+                <span class="close">&times;</span>
+                <p id="feedback"></p>
+              </div>
+            </div>
 
                 <script>const pageData = { sign: "{{ sign }}" };</script>
                 <script src="{% static 'test/script.js' %}"></script>
