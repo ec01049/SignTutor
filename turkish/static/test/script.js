@@ -9,15 +9,25 @@ const VIDEO_LENGTH_MILLISECONDS = 2 * 1000;
 
 // Modal
 const modal = document.getElementById("popup");
-// Get the button that opens the modal
-const btn = document.getElementById("test");
+
 // Get the <span> element that closes the modal
 const span = document.getElementsByClassName("close")[0];
 
-// When the user clicks on <span> (x), close the modal
+const btn = document.getElementById("again-btn");
+
+// When the user clicks on <span> (x) or try again button, close the modal
 span.onclick = function() {
   modal.style.display = "none";
 }
+
+
+btn.click = function() {
+  modal.style.display = "none";
+}
+
+function closeModal(){
+  modal.style.display = "none";
+    }
 
 // When the user clicks anywhere outside of the modal, close it
 window.onclick = function(event) {
@@ -151,7 +161,7 @@ async function makeDetection(blob) {
         // Start recording, and change button to display 'stop
         // recording'.
         if (!sMediaRecorder) {
-          alert("Error!");
+          alert("Error! Your camera isn't set up.");
           return;
         }
 
@@ -200,20 +210,26 @@ async function makeDetection(blob) {
               $("#renderOverlay").classList.remove('show');
               $("#loaderWrapper").classList.remove('show');
 
+              let example = document.getElementById('grid-child-example');
+              let user = document.getElementById('grid-child-user');
 
               if (prediction === pageData.sign) {
+                empty(example);
+                empty(user);
                 $("#feedback").textContent = "Well done, You performed '" + pageData.sign + "' correctly!"
 
                 // User performed the expected sign correctly.
               } else if (prediction === null){
                 $("#feedback").textContent = "We couldn't detect you. Make sure you're positioned in the camera and try again."
+                empty(example);
+                empty(user);
+
               } else {
+
+                empty(example);
+                empty(user);
                 // They did a different sign (or none was detected).
                 $("#feedback").textContent = "Not quite! You didn't perform '" + pageData.sign + "' correctly. We predicted '" + prediction + "'. Lets see the difference..."
-                let example = document.getElementById('grid-child-example');
-                empty(example);
-                let user = document.getElementById('grid-child-user');
-                empty(user);
 
                 let exampleSrc = "/static/" + pageData.sign + "/videos/webm/0.webm";
                 //let userSrc = base64EncodeBlob(videoBlob);
@@ -238,10 +254,10 @@ async function makeDetection(blob) {
                 user.appendChild(userElement);
 
                 function empty(element) {
-                while(element.firstElementChild) {
-                 element.firstElementChild.remove();
+                  while(element.firstElementChild) {
+                   element.firstElementChild.remove();
+                  }
                 }
-            }
               }
             } catch(_) {
               // do nothing on error
