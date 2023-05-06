@@ -206,10 +206,42 @@ async function makeDetection(blob) {
 
                 // User performed the expected sign correctly.
               } else if (prediction === null){
-                $("#feedback").textContent = "Not quite! You didn't perform '" + pageData.sign + "' correctly. Make sure you're positioned correctly."
+                $("#feedback").textContent = "We couldn't detect you. Make sure you're positioned in the camera and try again."
               } else {
                 // They did a different sign (or none was detected).
-                $("#feedback").textContent = "Not quite! You didn't perform '" + pageData.sign + "' correctly. We predicted '" + prediction + "'."
+                $("#feedback").textContent = "Not quite! You didn't perform '" + pageData.sign + "' correctly. We predicted '" + prediction + "'. Lets see the difference..."
+                let example = document.getElementById('grid-child-example');
+                empty(example);
+                let user = document.getElementById('grid-child-user');
+                empty(user);
+
+                let exampleSrc = "/static/" + pageData.sign + "/videos/webm/0.webm";
+                //let userSrc = base64EncodeBlob(videoBlob);
+                const userSrc = window.URL.createObjectURL(videoBlob, {
+                  type: 'application/octet-stream'
+                });
+
+                //# create video element to append into above <a> tag
+                let exampleElement = document.createElement("video");
+                exampleElement.setAttribute("controls", "true");
+                exampleElement.setAttribute("width", "384");
+                exampleElement.setAttribute("src", exampleSrc);
+
+                //# create video element to append into above <a> tag
+                let userElement = document.createElement("video");
+                userElement.setAttribute("controls", "true");
+                userElement.setAttribute("width", "384");
+                userElement.setAttribute("src", userSrc);
+
+                //# append the dynamically created element...
+                example.appendChild(exampleElement);
+                user.appendChild(userElement);
+
+                function empty(element) {
+                while(element.firstElementChild) {
+                 element.firstElementChild.remove();
+                }
+            }
               }
             } catch(_) {
               // do nothing on error
