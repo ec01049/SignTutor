@@ -174,13 +174,12 @@ async function makeDetection(blob) {
           const onChunk = async (event) => {
 
             $("#startButton").textContent = "Loading...";
-            $("#loader").classList.add('show');
-            $("#renderLoading").textContent = 'Calculating your performance';
-            $("#renderCounter").textContent = '';
+
             $("#renderOverlay").classList.add('show');
+            $("#loaderWrapper").classList.add('show');
+
             sMediaRecorder.stop();
             sMediaRecorder.removeEventListener('dataavailable', onChunk);
-
 
             const rawVideoBlob = event.data;
             const videoBlob = new Blob([rawVideoBlob], {
@@ -198,16 +197,15 @@ async function makeDetection(blob) {
 
               modal.style.display = "block";
 
-              $("#loader").classList.remove('show');
               $("#renderOverlay").classList.remove('show');
-
+              $("#loaderWrapper").classList.remove('show');
 
 
               if (prediction === pageData.sign) {
                 $("#feedback").textContent = "Well done, You performed '" + pageData.sign + "' correctly!"
 
                 // User performed the expected sign correctly.
-              } else if (prediction === none){
+              } else if (prediction === null){
                 $("#feedback").textContent = "Not quite! You didn't perform '" + pageData.sign + "' correctly. Make sure you're positioned correctly."
               } else {
                 // They did a different sign (or none was detected).
@@ -218,7 +216,6 @@ async function makeDetection(blob) {
             }
             // downloadFile(videoBlob, 'video.webm');
 
-            $("#renderLoading").textContent = 'Get Ready!';
             $("#startButton").textContent = "Start Recording";
             $("#startButton").disabled = false;
             isRecording = false;
@@ -231,6 +228,7 @@ async function makeDetection(blob) {
 
         // Start countdown
         $("#renderOverlay").classList.add('show');
+        $("#countdownWrapper").classList.add('show');
 
         let timeout = 3;
 
@@ -239,6 +237,7 @@ async function makeDetection(blob) {
           timeout--;
 
           if (timeout < 0) {
+            $("#countdownWrapper").classList.remove('show');
             $("#renderOverlay").classList.remove('show');
             // Start recording after the animation has finished.
             setTimeout(startRecording, 200);

@@ -32,9 +32,14 @@
                 <p><button id="startButton">Start Recording</button></p>
                 <div id="renderWrapper">
                   <div id="renderOverlay">
-                    <div class="loader" id="loader"></div>
-                    <p class="big" id="renderCounter">3</p>
-                    <p id="renderLoading">Get ready!</p>
+                    <div id="loaderWrapper">
+                        <div class="loader" id="loader"></div>
+                        <p id="renderProcessing">Checking your video...</p>
+                    </div>
+                    <div id="countdownWrapper">
+                        <p class="big" id="renderCounter">3</p>
+                        <p id="renderLoading">Get ready!</p>
+                    </div>
                   </div>
                   <video autoplay id="render"></video>
                     <input type="hidden" name="csrfmiddlewaretoken" value="{{ csrf_token }}">

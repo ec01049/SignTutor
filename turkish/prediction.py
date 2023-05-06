@@ -5,8 +5,12 @@ import cv2
 import mediapipe as mp
 import numpy as np
 
-threshold = 0.6
+threshold = 0.8
 mp_holistic = mp.solutions.holistic  # Holistic model
+
+# Load the model
+print("Loading model")
+model = load_model('model/LSTMtanh.h5')
 
 # Actions that we try to detect
 actions = np.array(
@@ -39,9 +43,6 @@ def predict(file):
 
     filepath = file.name
     cap = cv2.VideoCapture(filepath)
-
-    print("Loading model")
-    model = load_model('model/LSTMtanh.h5')
 
     with mp_holistic.Holistic(min_detection_confidence=0.5, min_tracking_confidence=0.5) as holistic:
 

@@ -36,11 +36,34 @@ pre {
   height: 100%;
   width: 100%;
 
-  background: rgba(255, 255, 255, 0.6);
+  background: rgba(255, 255, 255, 0.8);
 }
 
 #renderOverlay.show {
   opacity: 100%;
+}
+
+#loaderWrapper, #countdownWrapper {
+  opacity: 0;
+  pointer-events: none !important;
+
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  width: 100%;
+  height: 100%;
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+
+  justify-content: center;
+  align-items: center;
+}
+
+#loaderWrapper.show, #countdownWrapper.show {
+  opacity: 1;
 }
 
 #renderOverlay p {
@@ -70,23 +93,17 @@ pre {
 }
 
  #loader {
-    opacity: 0;
-    border: 16px solid #f3f3f3; /* Light grey */
-    border-top: 16px solid #4CAF50; /* Blue */
+    border: 6px solid #f3f3f3; /* Light grey */
+    border-top: 6px solid #4CAF50; /* Blue */
     border-radius: 50%;
-    width: 100px;
-    height: 100px;
-    animation: spin 2s linear infinite;
-
+    width: 30px;
+    height: 30px;
+    animation: spin 1s ease-in-out infinite;
  }
 
 @keyframes spin {
     0% { transform: rotate(0deg); }
     100% { transform: rotate(360deg); }
-}
-
-#loader.show {
-    opacity: 100%;
 }
 
 
