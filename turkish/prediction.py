@@ -5,7 +5,7 @@ import cv2
 import mediapipe as mp
 import numpy as np
 
-threshold = 0.8
+threshold = 0.6
 mp_holistic = mp.solutions.holistic  # Holistic model
 
 # Load the model
@@ -39,6 +39,7 @@ def extract_keypoints_nf(results):
 
 
 def predict(file):
+    # Sequence of keypoint values
     sequence = []
 
     filepath = file.name
@@ -50,7 +51,6 @@ def predict(file):
         success = 1
 
         while success:
-
             # Read feed
             success, frame = cap.read()
 
@@ -61,19 +61,21 @@ def predict(file):
             # Code 1 means flip horizontally.
             frame = cv2.flip(frame, 1)
 
-            # Make detections
+            # 1. Make MediaPipe detections
             image, results = mediapipe_detection(frame, holistic)
 
-            # 2. Prediction logic
+            # 2. Append Keypoints into array
             keypoints = extract_keypoints_nf(results)
             sequence.append(keypoints)
-            # making prediction
 
+            # 3. Prediction Logic
             if len(sequence) == 50:
                 print("Making prediction")
                 res = model.predict(np.expand_dims(sequence, axis=0))[0]
                 # print(actions[np.argmax(res)])
                 if res[np.argmax(res)] > threshold:
                     result = actions[np.argmax(res)]
+                    confidence = res[np.argmax(res)]
                     print(result)
+                    # Return Classification
                     return result

@@ -1,5 +1,5 @@
 
-    // Video Dimensions
+// Video Dimensions
 const VIDEO_HEIGHT = 512;
 const VIDEO_WIDTH = 512;
 const FRAME_RATE = 30;
@@ -220,12 +220,12 @@ async function makeDetection(blob) {
 
                 // User performed the expected sign correctly.
               } else if (prediction === null){
-                $("#feedback").textContent = "We couldn't detect you. Make sure you're positioned in the camera and try again."
                 empty(example);
                 empty(user);
+                $("#feedback").textContent = "We couldn't detect you. Make sure you're positioned in the camera and try again."
+
 
               } else {
-
                 empty(example);
                 empty(user);
                 // They did a different sign (or none was detected).
@@ -253,12 +253,14 @@ async function makeDetection(blob) {
                 example.appendChild(exampleElement);
                 user.appendChild(userElement);
 
-                function empty(element) {
+
+              }
+
+              function empty(element) {
                   while(element.firstElementChild) {
                    element.firstElementChild.remove();
                   }
                 }
-              }
             } catch(_) {
               // do nothing on error
             }
