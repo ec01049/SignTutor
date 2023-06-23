@@ -10,7 +10,7 @@ mp_holistic = mp.solutions.holistic  # Holistic model
 
 # Load the model
 print("Loading model")
-model = load_model('model/LSTMtanh.h5')
+model = load_model('model/SignLanguageRecognitionFinal.h5')
 
 # Actions that we try to detect
 actions = np.array(
